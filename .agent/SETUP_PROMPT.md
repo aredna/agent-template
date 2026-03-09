@@ -65,6 +65,19 @@ done < /tmp/settings.env
 ## 4b. Prune Tech Stack
 Delete any Tech Stack rows from `AGENTS.md` that don't apply to this project (e.g., no Database, no Monorepo). The table should only contain tools actively used.
 
+## 4c. Dependency Bootstrap (if package.json exists)
+```bash
+cd {TARGET_PROJECT}
+[ -f package.json ] && {PKG_MGR} install
+```
+
+## 4d. Scaffold (greenfield only)
+If no `package.json` exists and the project needs one, create it now:
+```bash
+cd {TARGET_PROJECT}
+{PKG_MGR} init -y
+```
+
 ## 5. Populate AGENTS.md (Agent-Driven)
 Analyze the codebase and populate these sections based on your best judgment:
 - **Architecture → Layers**: Identify dependency layers from the source (e.g., core → features → ui)
@@ -77,4 +90,10 @@ Analyze the codebase and populate these sections based on your best judgment:
 ## 6. Verify
 ```bash
 grep -rn '{[A-Z_]*}' AGENTS.md .agent/ && echo "⛔ Fix placeholders" || echo "✓ Done"
+```
+
+## 7. Smoke Test
+```bash
+cd {TARGET_PROJECT}
+[ -f package.json ] && {PKG_MGR} install && echo "✓ Dependencies installed" || echo "⚠ No package.json"
 ```

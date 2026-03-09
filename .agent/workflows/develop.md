@@ -24,6 +24,12 @@ git worktree add -b $BRANCH ../{PROJECT}-wt-$TIMESTAMP main; cd ../{PROJECT}-wt-
 
 **Branch types:** `feature/`, `fix/`, `refactor/`, `test/`
 
+## 0.5 Environment ⛔ GATE
+```bash
+[ -f package.json ] && [ ! -d node_modules ] && {PKG_MGR} install
+{BUILD_CMD} || { echo "⛔ BUILD BROKEN before any changes"; exit 1; }
+```
+
 ## Usage
 - `/develop` (no args) → Ask user for instructions
 - `/develop {uuid}-{nn}` → Implement plan from `.agent/plans/`
@@ -54,8 +60,8 @@ Before proceeding to test gate, run MAINT, TEST, UX, SCOPE, DOCS, OPS personas
 
 ## 4. Test ⛔ GATE
 ```bash
-cd {SRC_DIR} && {TEST_CMD}  # Zero failures required
-cd {SRC_DIR} && {LINT_CMD}  # Zero errors/warnings
+{TEST_CMD}  # Zero failures required
+{LINT_CMD}  # Zero errors/warnings
 ```
 
 **Pre-existing failure?** Prove with `git diff > /tmp/my_changes.patch` → `git checkout .` → test → `git apply /tmp/my_changes.patch`. Document in commit.

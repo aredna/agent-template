@@ -8,14 +8,14 @@ Estimated: {6-12} hours
 cd {PROJECT_ROOT}
 git worktree add -b {type}/{uuid}-{nn} ../{PROJECT}-wt-{uuid}-{nn} main
 cd ../{PROJECT}-wt-{uuid}-{nn}
-cd {SRC_DIR} && {PKG_MGR} install
+{PKG_MGR} install
 ```
 
 ### Baseline Capture ⛔ MANDATORY
 > [!CAUTION]
 > **BEFORE any code changes**, capture baseline:
 ```bash
-cd {SRC_DIR} && {TEST_CMD} 2>&1 | tee /tmp/baseline_tests_{uuid}-{nn}.txt
+{TEST_CMD} 2>&1 | tee /tmp/baseline_tests_{uuid}-{nn}.txt
 echo "Baseline failures: $(grep -c 'FAIL\|✗' /tmp/baseline_tests_{uuid}-{nn}.txt || echo 0)"
 ```
 

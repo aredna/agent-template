@@ -15,6 +15,15 @@ Pre-merge verification. Run before `/finish`.
 ## 0. Worktree ⛔ GATE
 `pwd` → `/{PROJECT}`? STOP (you're in main). `*-wt-stream-*`? Use `/finish-stream`. `*-wt-*`? ✓ Continue.
 
+## 0.5 Environment ⛔ GATE
+```bash
+[ -f package.json ] && [ ! -d node_modules ] && { echo "⛔ node_modules missing — run {PKG_MGR} install"; exit 1; }
+{BUILD_CMD}
+{TEST_CMD}
+{LINT_CMD}
+```
+Build, test, and lint must all pass before plan completion checks begin.
+
 ## 1. Plan Completion (if implementing plan)
 ```bash
 cat .agent/plans/{uuid}-{nn}-*.md

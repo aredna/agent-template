@@ -15,14 +15,25 @@ Deep exploratory bug hunting. **Read-only—creates report artifact only.**
 - Read source of relevant dependencies AND all related local code before concluding
 - High-confidence root cause — verify hypotheses with `rg`, not assumptions
 
-## Investigation Tools
+## Investigation Patterns
+Search for these categories using language-appropriate patterns:
+
+| Category | What to Search For |
+|----------|--------------------|
+| Async gaps | Async functions missing proper awaiting/error propagation |
+| Event leaks | Event listeners or subscriptions never cleaned up |
+| Timer leaks | Scheduled/recurring tasks never cancelled |
+| State mutations | Unprotected shared state changes |
+| Silent failures | Caught errors that are swallowed without logging or re-throwing |
+| Resource leaks | Open handles (files, connections, streams) without cleanup |
+| Race conditions | Concurrent access to shared resources without synchronization |
+| Null/empty paths | Missing null checks before dereference |
+
 ```bash
-rg -l 'async\s+\w+\(' {SRC_DIR} --type js | xargs rg -L 'await'  # Async without await
-rg "addEventListener\(" {SRC_DIR} --type js           # Event listeners
-rg "setTimeout|setInterval" {SRC_DIR} --type js       # Timers
-rg "this\.\w+\s*=" {SRC_DIR} --type js | head -20     # State mutations
-rg "catch\s*\(" {SRC_DIR} --type js                   # Error handling
-rg "\.catch\(" {SRC_DIR} --type js
+rg "{ASYNC_GAP_PATTERN}" {SRC_DIR} {SOURCE_TYPE_FLAG}       # Async gaps
+rg "{EVENT_SUBSCRIBE_PATTERN}" {SRC_DIR} {SOURCE_TYPE_FLAG}  # Event leaks
+rg "{TIMER_PATTERN}" {SRC_DIR} {SOURCE_TYPE_FLAG}            # Timer leaks
+rg "{ERROR_CATCH_PATTERN}" {SRC_DIR} {SOURCE_TYPE_FLAG}      # Silent failures
 ```
 
 ## Report Format

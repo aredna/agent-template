@@ -16,10 +16,10 @@ Comprehensive codebase health check. **Read-only—creates report artifact only.
 ### Index Accuracy
 ```bash
 # Check File Index in AGENTS.md (inline JSON)
-grep -oE '"[^"]+\.(js|ts)"' AGENTS.md | tr -d '"' | while read f; do
+grep -oE '"[^"]+\.{SOURCE_EXT}"' AGENTS.md | tr -d '"' | while read f; do
   [ ! -f "$f" ] && echo "STALE: $f"
 done
-fd -e js -e ts {SRC_DIR} --type f | while read f; do
+fd {SOURCE_EXT_FLAGS} {SRC_DIR} --type f | while read f; do
   grep -q "$(basename "$f")" AGENTS.md || echo "UNINDEXED: $f"
 done
 ```
@@ -27,7 +27,7 @@ done
 ### Semantics Accuracy
 ```bash
 # Check events in AGENTS.md Semantics JSON
-rg "emit\(['\"](\w+)['\"]" {SRC_DIR} -o --type js | grep -oE "'[^']+'" | sort -u | while read evt; do
+rg "{EVENT_EMIT_PATTERN}" {SRC_DIR} -o {SOURCE_TYPE_FLAG} | sort -u | while read evt; do
   grep -q "$evt" AGENTS.md || echo "UNDOCUMENTED EVENT: $evt"
 done
 ```
@@ -37,23 +37,22 @@ Review `AGENTS.md` Architecture section against actual codebase.
 
 ## 2. Dependency Audit
 ```bash
-{PKG_MGR} x depcheck              # Unused
-npx madge --circular {SRC_DIR}    # Circular
+{DEP_CHECK_CMD}                   # Unused
+{CIRCULAR_CHECK_CMD}              # Circular
 {PKG_MGR} outdated                # Outdated
 ```
 
 ## 3. Code Quality Audit
 ```bash
-rg '\b[0-9]+\b' {SRC_DIR} --type js -g '!*.test.js' | grep -v 'CONFIG\|const\|//\|0\|1\|2'  # Magic numbers
-rg 'console\.(log|warn|error)' {SRC_DIR} --type js -g '!*.test.js'  # Console
-rg 'TODO|FIXME|HACK|XXX' {SRC_DIR} --type js  # TODOs
-rg 'function (\w+)' {SRC_DIR} -o --type js | sort | uniq -c | sort -n  # Dead code candidates
+rg '\b[0-9]+\b' {SRC_DIR} {SOURCE_TYPE_FLAG} -g '!{TEST_GLOB}' | grep -v 'CONFIG\|0\|1\|2'  # Magic numbers
+rg '{LOG_PATTERN}' {SRC_DIR} {SOURCE_TYPE_FLAG} -g '!{TEST_GLOB}'  # Debug logging
+rg 'TODO|FIXME|HACK|XXX' {SRC_DIR} {SOURCE_TYPE_FLAG}  # TODOs
 ```
 
 ## 4. Test Audit
 ```bash
-for f in $(fd -e js {SRC_DIR} -g '!*.test.js'); do
-  test_file="${f%.js}.test.js"; [ ! -f "$test_file" ] && echo "NO TEST: $f"
+for f in $(fd {SOURCE_EXT_FLAGS} {SRC_DIR} -g '!{TEST_GLOB}'); do
+  test_file="${f%.*}{TEST_FILE_SUFFIX}"; [ ! -f "$test_file" ] && echo "NO TEST: $f"
 done
 ```
 Look for: tests without assertions, happy-path only, hardcoded timing.

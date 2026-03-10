@@ -35,13 +35,13 @@ From research report: {link to research report}
 ### Module: `{filename}` [NEW|MODIFY|DELETE]
 **Purpose**: What this module does
 
-- `functionName(param: Type, param2: Type): ReturnType` — purpose
+- `functionName(param, param2) -> ReturnType` — purpose
   - Calls: `existingModule.existingFn()`
   - Errors: throws `ErrorType` when {condition}
 
 ### New Types
 ```
-interface TypeName {
+TypeName {
   field: Type  // purpose
 }
 ```
@@ -68,25 +68,25 @@ All tasks required—no optional items.
 ### Legacy Inventory
 | Item | Location | Type |
 |------|----------|------|
-| `oldFunction()` | `path/to/file.js` | Function |
+| `oldFunction()` | `path/to/file` | Function |
 
 ### Purge Gate
 After implementation, must return zero:
 ```bash
-rg "oldFunction\(" {SRC_DIR} --type js && echo "⛔ LEGACY REMAINS" || echo "✓ Purged"
+rg "oldFunction\(" {SRC_DIR} {SOURCE_TYPE_FLAG} && echo "⛔ LEGACY REMAINS" || echo "✓ Purged"
 ```
 
 ### Anti-Patterns to Avoid
 - ❌ Deprecation comments (delete the code instead)
-- ❌ Compatibility shims (`export const oldName = newName`)
+- ❌ Compatibility shims (aliasing old names to new)
 - ❌ Feature flags branching old/new paths
 - ❌ Wrapper functions calling legacy code
 
 ### Shim Detection
 Verify NO shims exist before marking complete:
 ```bash
-rg "wrapper|shim|compat|legacy" {SRC_DIR} --type js
-rg "export.*from.*legacy|= old|= deprecated" {SRC_DIR} --type js
+rg "wrapper|shim|compat|legacy" {SRC_DIR} {SOURCE_TYPE_FLAG}
+rg "{SHIM_ALIAS_PATTERN}|= old|= deprecated" {SRC_DIR} {SOURCE_TYPE_FLAG}
 ```
 
 ## Verification
@@ -98,7 +98,7 @@ rg "export.*from.*legacy|= old|= deprecated" {SRC_DIR} --type js
 ## Files Affected
 | File | Change |
 |------|--------|
-| `path/to/file.js` | Add/Modify/Delete |
+| `path/to/file` | Add/Modify/Delete |
 
 ## ⛔ Implementation Contract
 > [!CAUTION]

@@ -9,7 +9,7 @@ A drop-in `AGENTS.md` + workflow kit for **[Google Antigravity](https://deepmind
    cp -r .agent/ /path/to/your-project/
    cp AGENTS.md /path/to/your-project/
    ```
-2. **Run setup** — open `.agent/SETUP_PROMPT.md` with the agent. It auto-detects your tech stack, fills `AGENTS.md` placeholders, and prunes unused sections.
+2. **Run setup** — open `.agent/SETUP_PROMPT.md` with the agent. It auto-detects your tech stack, fills token placeholders across `AGENTS.md` and all workflow/plan files, and prunes unused sections.
 3. **Use workflows** — `/research`, `/plan`, `/develop`, `/verify`, `/finish`.
 
 ## Antigravity Modes

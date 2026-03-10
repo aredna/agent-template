@@ -7,8 +7,8 @@ Initializes the `.agent` folder and root `AGENTS.md`. Delete this file after set
 
 ## 1. Copy Template
 ```bash
-cp -r /home/gotem/dev/project_template/.agent {TARGET_PROJECT}/
-cp /home/gotem/dev/project_template/AGENTS.md {TARGET_PROJECT}/
+cp -r /path/to/agent-template/.agent {TARGET_PROJECT}/
+cp /path/to/agent-template/AGENTS.md {TARGET_PROJECT}/
 rm {TARGET_PROJECT}/.agent/SETUP_PROMPT.md
 ```
 

@@ -24,7 +24,7 @@ What to investigate: How does X work? What calls Y? Where is Z used?
 
 ## 2. Trace
 ```bash
-rg "functionName\(" {SRC_DIR} --type js  # Entry points
+rg "functionName\(" {SRC_DIR} {SOURCE_TYPE_FLAG}  # Entry points
 ```
 Follow execution path. Track data transformations.
 
@@ -87,7 +87,7 @@ Pros: ... | Cons: ... | Score: ...
 Use skeleton format from `.agent/plans/_template.md` (Module, Types, Data Flow, Error Strategy sections).
 
 ## Files Examined
-- `path/to/file.js` — Relevance
+- `path/to/file` — Relevance
 ```
 
 ## After Research

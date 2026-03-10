@@ -26,7 +26,7 @@ git worktree add -b $BRANCH ../{PROJECT}-wt-$TIMESTAMP main; cd ../{PROJECT}-wt-
 
 ## 0.5 Environment ⛔ GATE
 ```bash
-[ -f package.json ] && [ ! -d node_modules ] && {PKG_MGR} install
+{DEPS_INSTALLED_CHECK} || {PKG_MGR} install
 {BUILD_CMD} || { echo "⛔ BUILD BROKEN before any changes"; exit 1; }
 ```
 
@@ -48,7 +48,7 @@ On-demand: `AGENTS.md` (File Index, Semantics, Errors).
 
 Before marking task complete:
 ```bash
-grep -l "pattern_from_plan" path/to/file.js || echo "⛔ PATTERN NOT FOUND"
+grep -l "pattern_from_plan" path/to/file || echo "⛔ PATTERN NOT FOUND"
 ```
 
 ## 3. Implement

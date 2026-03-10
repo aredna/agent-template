@@ -17,7 +17,7 @@ Pre-merge verification. Run before `/finish`.
 
 ## 0.5 Environment ⛔ GATE
 ```bash
-[ -f package.json ] && [ ! -d node_modules ] && { echo "⛔ node_modules missing — run {PKG_MGR} install"; exit 1; }
+{DEPS_INSTALLED_CHECK} || { echo "⛔ Dependencies missing — run {PKG_MGR} install"; exit 1; }
 {BUILD_CMD}
 {TEST_CMD}
 {LINT_CMD}
@@ -31,7 +31,7 @@ cat .agent/plans/{uuid}-{nn}-*.md
 For each task: implemented (not skipped), pattern exists (grep), file modified (git diff).
 
 ```bash
-grep -r "expected_pattern" path/to/file.js || echo "⛔ PATTERN MISSING"
+grep -r "expected_pattern" path/to/file || echo "⛔ PATTERN MISSING"
 git diff main --name-only
 ```
 
@@ -41,7 +41,7 @@ For each changed file, run ARCH, SEC, PERF, TEST, COMPAT, SCOPE, OPS personas
 
 ## 2. New Files → Tests
 ```bash
-git diff main --name-only --diff-filter=A | grep -E '\.(js|ts)$' | grep -v '\.test\.'
+git diff main --name-only --diff-filter=A | grep -E '{SOURCE_EXTENSIONS}' | grep -v '{TEST_GLOB}'
 ```
 Each new source file needs a test.
 

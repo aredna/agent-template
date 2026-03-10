@@ -33,7 +33,7 @@ Scan for:
 For every question found, **attempt to answer it** before escalating:
 ```bash
 rg "<term>" . --type md   # Related docs
-rg "<term>" . --type js   # Codebase usage
+rg "<term>" . {SOURCE_TYPE_FLAG}   # Codebase usage
 ```
 Check related files, specs, and codebase for answers.
 
@@ -42,7 +42,7 @@ Insert inline annotations directly below the relevant line in the artifact:
 
 ```markdown
 > **Q**: What happens when X and Y conflict?
-> **A**: Resolved in `gdd-105-combat.md` § Damage Priority — X takes precedence.
+> **A**: Resolved in `related-doc.md` § Section Name — X takes precedence.
 ```
 
 For unresolved questions:
@@ -56,7 +56,7 @@ If a point is genuinely ambiguous **and no other file clarifies it**:
 - Add a minimal note to the **source file** (comment appropriate to file type)
 - Keep it to one line when possible
 - If a corner case is covered in another file, add a cross-reference instead of duplicating:
-  `<!-- See gdd-105-combat.md § Damage Priority -->`
+  `<!-- See related-doc.md § Section Name -->`
 
 **Do not** add notes for things that are clear in context or explained elsewhere.
 

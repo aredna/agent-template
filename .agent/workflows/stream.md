@@ -32,7 +32,7 @@ cd ../$WORKTREE_NAME
 ```bash
 mkdir -p .agent/KI; echo ".agent/KI/" >> .gitignore
 cp -r {KI_PATH}/artifacts/* .agent/KI/; cp {KI_PATH}/metadata.json .agent/KI/
-LAST4=$(echo $TIMESTAMP | tail -c 5); PORT="1${LAST4}"; PORT2=$((PORT + 1))
+LAST4=$(echo $TIMESTAMP | tail -c 5); PORT="1${LAST4}"
 cd {SRC_DIR} && {PKG_MGR} install
 ```
 
@@ -47,14 +47,12 @@ Write handoff prompt to `.agent/HANDOFF.md`:
 **Worktree**: `{WORKTREE_NAME}`
 **Branch**: `{BRANCH_NAME}`
 
-## Start Dev Servers
+## Start Dev Server
 ```bash
-cd {SRC_DIR} && {DEV_CMD} -- --host --port {PORT}
-cd {SRC_DIR} && HTTPS=true {DEV_CMD} -- --host --port {PORT2}
+cd {SRC_DIR} && {DEV_SERVER_START} {PORT}
 ```
 
-**HTTP 1.1**: http://localhost:{PORT}
-**HTTP 2.0**: https://localhost:{PORT2}
+**URL**: http://localhost:{PORT}
 
 ## Knowledge Index
 Project KIs in `.agent/KI/`:

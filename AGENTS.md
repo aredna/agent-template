@@ -18,8 +18,8 @@
 - **Why, not what**: Intent, constraints, non-obvious behavior
 - **Max 1 line** unless public API or complex algorithm
 - **No banners, no commented-out code**
-- **TODO format**: `// TODO(username): description` — no bare TODOs
-- **JSDoc/TSDoc**: Public APIs only; `@param` + `@returns`
+- **TODO format**: `{COMMENT} TODO(username): description` — no bare TODOs
+- **Doc comments**: Public APIs only; document parameters + return values
 
 ## Review Personas
 | ID | Focus | Checks |
@@ -82,13 +82,39 @@
 
 <!-- Setup: delete rows that don't apply -->
 
+### Language Tokens
+<!-- Setup: fill these for your language/framework -->
+| Token | Purpose | Value |
+|-------|---------|-------|
+| `{SOURCE_EXT}` | Primary source extension | |
+| `{SOURCE_EXTENSIONS}` | Grep pattern for source files | |
+| `{SOURCE_EXT_FLAGS}` | `fd` extension flags | |
+| `{SOURCE_TYPE_FLAG}` | `rg` type filter | |
+| `{TEST_FILE_SUFFIX}` | Test file naming convention | |
+| `{TEST_GLOB}` | Glob for test files | |
+| `{ASSERTION_PATTERN}` | Grep for test assertions | |
+| `{MOCK_PATTERN}` | Grep for test mocks | |
+| `{RUNTIME}` | Runtime process name | |
+| `{COMMENT}` | Single-line comment prefix | |
+| `{DEPS_INSTALLED_CHECK}` | Check if deps are installed | |
+| `{DEP_CHECK_CMD}` | Find unused dependencies | |
+| `{CIRCULAR_CHECK_CMD}` | Find circular imports | |
+| `{LOG_PATTERN}` | Debug logging pattern | |
+| `{EVENT_EMIT_PATTERN}` | Event emission pattern | |
+| `{ASYNC_GAP_PATTERN}` | Async without proper await | |
+| `{EVENT_SUBSCRIBE_PATTERN}` | Event listener registration | |
+| `{TIMER_PATTERN}` | Scheduled/recurring tasks | |
+| `{ERROR_CATCH_PATTERN}` | Error catch blocks | |
+| `{SHIM_ALIAS_PATTERN}` | Re-export or aliasing | |
+| `{DEV_SERVER_START}` | Dev server start command | |
+
 ## Architecture
 
 ### Layers
 TBD — Setup: analyze imports and populate (e.g., `core → features → ui`)
 
 ### Constraints
-TBD — Setup: document observed dependency rules (e.g., core has no DOM imports)
+TBD — Setup: document observed dependency rules (e.g., core has no UI imports)
 
 ### Key Directories
 - `.agent/`: **SOURCE OF TRUTH** for AI context
@@ -110,16 +136,16 @@ See `.agent/workflows/` for definitions.
 
 ## File Index
 ```json
-{"cats":{"entry":"entrypoints","core":"pure logic","features":"business","ui":"DOM","utils":"helpers"},
+{"cats":{"entry":"entrypoints","core":"pure logic","features":"business","ui":"presentation","utils":"helpers"},
 "files":{"entry":[],"core":[],"features":[],"ui":[],"utils":[]},
-"lookup":{"main":"{SRC_DIR}/main.js"}}
+"lookup":{"main":"{SRC_DIR}/{MAIN_ENTRY}"}}
 ```
 
 ## Semantics
 ```json
 {"v":"1.0",
 "concepts":[],"entities":[],"events":[],"endpoints":[],
-"commands":[],"hooks":[],"state_keys":[],
+"commands":[],"lifecycle_hooks":[],"state_keys":[],
 "feature_flags":[],"config_keys":[],"errors":[]}
 ```
 
@@ -132,7 +158,7 @@ TBD — Setup: note conventions, forbidden patterns, gotchas
 | hang | runaway watch/loop | kill, use `--run` |
 | module not found | stale/missing import | check File Index |
 | circular dep | tight coupling | EventBus / DI |
-| DOM in core | layer violation | move to UI layer |
+| layer violation | wrong dependency | move to correct layer |
 | recurring bug | similar code elsewhere | `rg` patterns, fix all |
 
 ## ⛔ Self-Update
@@ -142,3 +168,29 @@ Update as changes happen — don't wait for `/finish`:
 - **Errors** → new patterns encountered
 - **Rules** → decisions or gotchas discovered
 - On `/audit`, verify File Index + Semantics match actual state
+
+---
+
+## Setup Checklist
+When adopting this template for a new project:
+
+1. **Project Overview** — Fill `{DESCRIPTION}`, `{PHASE}`, `{TARGET_AUDIENCE}`
+2. **Tech Stack** — Fill all tool values, delete rows that don't apply
+   - Required: `{LANGUAGE}`, `{PKG_MGR}`, `{BUILD_CMD}`, `{TEST_CMD}`, `{LINT_CMD}`
+   - If applicable: `{UI_FRAMEWORK}`, `{CSS_APPROACH}`, `{DEV_CMD}`, `{DEFAULT_PORT}`, `{DATABASE}`, `{API_STYLE}`
+3. **Language Tokens** — Fill **every** token in the Language Tokens table
+   - All values must be valid shell commands/patterns for your stack
+   - Test each grep/fd pattern against your codebase before committing
+4. **Architecture** — Analyze imports, populate Layers + Constraints
+   - Layers: dependency order between directories
+   - Constraints: which layers must not import from which
+5. **Key Directories** — Set `{SRC_DIR}`, `{PROJECT}`, `{PROJECT_ROOT}`, add project-specific dirs
+6. **File Index** — Populate with actual source files, set `{MAIN_ENTRY}`
+   - Categorize every source file into entry/core/features/ui/utils
+7. **Semantics** — Populate concepts, entities, events, endpoints from codebase
+8. **Project-Specific Rules** — Document conventions, forbidden patterns, gotchas
+9. **Technical Priorities** — Set `{PRIORITY_1-3}`
+10. **Errors** — Customize symptom table for your stack's common failure modes
+11. **Workflows** — Review `.agent/workflows/` — all use tokens defined above
+    - Verify `{KI_PATH}` in `stream.md` points to your KI location
+12. **Plan Template** — Review `.agent/plans/_template.md` — uses same tokens

@@ -47,6 +47,7 @@ Supporting workflows:
 | `/finish-stream` | Verification | Merge a stream worktree back to `main`. **User-only** — agents never run this. |
 | `/audit` | Planning | Read-only codebase health check (docs accuracy, dependencies, code quality, test coverage). |
 | `/qa` | Planning | Deep exploratory bug hunting with structured severity reporting. |
+| `/review` | Planning | Review a file for clarity, logical consistency, and open questions. Inline Q&A in a brain artifact; auto-adds notes only for genuine ambiguity. |
 | `/cleanup` | Execution | Safely kill orphaned dev servers and remove stale worktrees. |
 | `/validate-ki` | Verification | Verify Knowledge Item artifacts haven't drifted from the actual codebase. |
 

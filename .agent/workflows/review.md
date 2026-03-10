@@ -66,8 +66,25 @@ Present via `notify_user`:
 - List of **open questions only** (ones the agent could not answer)
 - Any notes added to the source file
 
+## Report Format
+```markdown
+# Review: {filename}
+
+## Summary
+{Total questions} found | {Resolved} self-resolved | {Open} open
+
+## Open Questions
+1. L{line}: {question} — {context}
+
+## Notes Added to Source
+- L{line}: {note added}
+```
+
 ## Principles
 - **Research first** — answer before asking
 - **Concise** — no unnecessary comments in source
 - **Cross-reference** — point to other files, don't duplicate
 - **Artifact is the workspace** — Q&A lives in the artifact, not the source
+
+## After `/review`
+Open questions → Discuss with user | Ambiguity fixed → Document | Clean → No action needed

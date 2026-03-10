@@ -58,6 +58,10 @@ Create/modify files per plan or instructions.
 Before proceeding to test gate, run MAINT, TEST, UX, SCOPE, DOCS, OPS personas
 (see `AGENTS.md` → Review Personas).
 
+## 3.7 Test Cases
+Run `/testcases` — scope auto-detects to changed files only.
+Adds, updates, and removes tests for all implemented code before the test gate.
+
 ## 4. Test ⛔ GATE
 ```bash
 {TEST_CMD}  # Zero failures required

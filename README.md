@@ -27,7 +27,7 @@ This template is built around the three modes in Antigravity's system prompt. Ea
 The primary development loop:
 
 ```
-/research (PLANNING) → /plan (PLANNING) → /develop (EXECUTION) → /verify (VERIFICATION) → /finish (VERIFICATION)
+/research (PLANNING) → /plan (PLANNING) → /develop (EXECUTION) → /testcases (EXECUTION) → /verify (VERIFICATION) → /finish (VERIFICATION)
 ```
 
 | Command | Mode | Purpose |
@@ -35,6 +35,7 @@ The primary development loop:
 | `/research` | Planning | Investigate code, evaluate design alternatives, produce an approved skeleton. **Only interactive workflow** — all others run autonomously from its output. |
 | `/plan` | Planning | Decompose a research skeleton into sequenced, self-contained plan files in `.agent/plans/`. No design decisions here. |
 | `/develop` | Execution | Implement a plan (or ad-hoc instructions) inside a git worktree. Includes persona-based self-review and a mandatory test gate. |
+| `/testcases` | Execution | Full test lifecycle: audit coverage, add/update/delete test cases. Auto-scopes to changed files when called from `/develop`, or audits the full codebase standalone. |
 | `/verify` | Verification | Confirm every planned pattern exists, run persona sweep on diffs, sync `AGENTS.md`. Required before `/finish`. |
 | `/finish` | Verification | Stage, commit, rebase onto `main`, fast-forward merge, remove worktree. |
 

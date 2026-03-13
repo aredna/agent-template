@@ -1,13 +1,13 @@
-# {UUID}-{NN}: {Title}
-Estimated: {6-12} hours
+# {WORD}-{NN}: {Title}
+Estimated: {36-48} hours
 
 ## ⛔ Worktree Required
-**Worktree:** `{PROJECT}-wt-{uuid}-{nn}` | **Branch:** `{type}/{uuid}-{nn}`
+**Worktree:** `{PROJECT}-wt-{word}-{nn}` | **Branch:** `{type}/{word}-{nn}`
 
 ```bash
 cd {PROJECT_ROOT}
-git worktree add -b {type}/{uuid}-{nn} ../{PROJECT}-wt-{uuid}-{nn} main
-cd ../{PROJECT}-wt-{uuid}-{nn}
+git worktree add -b {type}/{word}-{nn} ../{PROJECT}-wt-{word}-{nn} main
+cd ../{PROJECT}-wt-{word}-{nn}
 {PKG_MGR} install
 ```
 
@@ -15,13 +15,13 @@ cd ../{PROJECT}-wt-{uuid}-{nn}
 > [!CAUTION]
 > **BEFORE any code changes**, capture baseline:
 ```bash
-{TEST_CMD} 2>&1 | tee /tmp/baseline_tests_{uuid}-{nn}.txt
-echo "Baseline failures: $(grep -c 'FAIL\|✗' /tmp/baseline_tests_{uuid}-{nn}.txt || echo 0)"
+{TEST_CMD} 2>&1 | tee /tmp/baseline_tests_{word}-{nn}.txt
+echo "Baseline failures: $(grep -c 'FAIL\|✗' /tmp/baseline_tests_{word}-{nn}.txt || echo 0)"
 ```
 
 ## Execution
 - **Parallel group**: {A, B, C, or SEQUENTIAL}
-- **Depends on**: {uuid}-{NN} (or NONE)
+- **Depends on**: {word}-{NN} (or NONE)
 
 ## Goal
 What this plan accomplishes. One paragraph max.
@@ -105,4 +105,4 @@ rg "{SHIM_ALIAS_PATTERN}|= old|= deprecated" {SRC_DIR} {SOURCE_TYPE_FLAG}
 > Modify ALL listed files. Implement EXACT patterns. Verify with grep. No shims.
 
 ## After Implementation
-1. `/verify` → 2. Archive: `mv .agent/plans/{uuid}-{nn}-*.md .agent/plans/archive/` → 3. `/finish`
+1. `/verify` → 2. Archive: `mv .agent/plans/{word}-{nn}-*.md .agent/plans/archive/` → 3. `/finish`

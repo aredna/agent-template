@@ -32,13 +32,13 @@ git worktree add -b $BRANCH ../{PROJECT}-wt-$TIMESTAMP main; cd ../{PROJECT}-wt-
 
 ## Usage
 - `/develop` (no args) → Ask user for instructions
-- `/develop {uuid}-{nn}` → Implement plan from `.agent/plans/`
+- `/develop {word}-{nn}` → Implement plan from `.agent/plans/`
 - `/develop {instructions}` → Follow user instructions
 
 // turbo-all
 
 ## 1. Load Context
-Plan: `cat .agent/plans/{uuid}-{nn}-*.md` — follow Tasks exactly.
+Plan: `cat .agent/plans/{word}-{nn}-*.md` — follow Tasks exactly.
 On-demand: `AGENTS.md` (File Index, Semantics, Errors).
 
 ## 2. Plan Adherence ⛔ GATE

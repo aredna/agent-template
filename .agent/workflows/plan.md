@@ -11,6 +11,8 @@ read_when:
 
 Create self-contained implementation plans from research output. **Autonomous — no user interaction needed.**
 
+**Target time: 36–48 hours of work** unless the user specifies a different scope during invocation.
+
 > [!IMPORTANT]
 > Plans go to `.agent/plans/`, NOT `implementation_plan.md`.
 
@@ -54,22 +56,22 @@ Identify parallelism: which plans can run together vs. sequentially.
 
 ## 4. Plan Naming
 
-**Format:** `{UUID}-{NN}-{name}.md`
-- UUID: 4-char base36 (`cat /dev/urandom | tr -dc 'a-z0-9' | head -c 4`)
+**Format:** `{WORD}-{NN}-{name}.md`
+- WORD: a random 4–6 character common English word, all lowercase (e.g. `mint`, `spark`, `bloom`, `crane`, `flint`, `grove`). Pick one that doesn't collide with existing plan prefixes.
 - NN: 2-digit sequence (00=execution plan, 01-99=implementation)
 - Migration prefix: `migrate_`
 
 ```bash
 # Get next sequence
-ls .agent/plans/ 2>/dev/null | grep -oE "^$UUID-[0-9]{2}" | grep -oE '[0-9]{2}' | sort -n | tail -1
+ls .agent/plans/ 2>/dev/null | grep -oE "^$WORD-[0-9]{2}" | grep -oE '[0-9]{2}' | sort -n | tail -1
 ```
 
-**Related plans:** One UUID, sequential NN values, create 00 execution plan last.
+**Related plans:** One WORD, sequential NN values, create 00 execution plan last.
 
 ## 5. Create Plan
 
 ```bash
-cp .agent/plans/_template.md .agent/plans/{uuid}-{nn}-{name}.md
+cp .agent/plans/_template.md .agent/plans/{word}-{nn}-{name}.md
 ```
 
 Fill all sections. Copy skeleton from research output. For migrations, complete Legacy Inventory and Purge Gate.
@@ -78,12 +80,12 @@ Fill all sections. Copy skeleton from research output. For migrations, complete 
 
 For multi-plan work:
 ```markdown
-# Execution Plan: {UUID}-00-{group_name}
+# Execution Plan: {WORD}-00-{group_name}
 
 | Order | Plan | Dependencies |
 |-------|------|--------------|
-| 1 | {UUID}-01 | None |
-| 2 | {UUID}-02 | 01 |
+| 1 | {WORD}-01 | None |
+| 2 | {WORD}-02 | 01 |
 
 After all: verify legacy deleted (if migration), tests pass, lint passes.
 ```
@@ -92,4 +94,4 @@ After all: verify legacy deleted (if migration), tests pass, lint passes.
 
 > [!CAUTION]
 > **STOP after plan creation.** Do NOT implement code.
-> Tell user: "Plans ready. Use `/develop {uuid}-{nn}` to implement."
+> Tell user: "Plans ready. Use `/develop {word}-{nn}` to implement."

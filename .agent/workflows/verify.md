@@ -26,7 +26,7 @@ Build, test, and lint must all pass before plan completion checks begin.
 
 ## 1. Plan Completion (if implementing plan)
 ```bash
-cat .agent/plans/{uuid}-{nn}-*.md
+cat .agent/plans/{word}-{nn}-*.md
 ```
 For each task: implemented (not skipped), pattern exists (grep), file modified (git diff).
 

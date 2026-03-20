@@ -40,14 +40,15 @@ Examples:
 
 Does not need to be cryptographically unique — just distinct enough to avoid collisions.
 
-### 3. Handling hung commands
+### 3. Handling silent completions
 
-When a command appears to hang (no new output, long wait):
+Commands frequently finish executing but never return output to the agent. This is the primary bug — **not** hanging commands. Assume commands complete quickly and poll for results.
 
-1. **Assume it finished** — the output likely completed but wasn't returned.
-2. **Read the output file** — use `view_file` on the redirect target.
-3. **Cancel the command** — send a terminate signal.
-4. **Move on regardless** — do not wait for cancel confirmation. Assume it canceled successfully.
+1. **Wait 10 seconds** after launching the command, then check the output file with `view_file`.
+2. **If the file has content** — the command finished. Cancel the command and move on.
+3. **If the file is empty or missing** — wait another 10 seconds and check again.
+4. **Repeat every 10 seconds** until results appear. Most commands finish well within the first check.
+5. **Do not wait for the terminal** — the file is the only reliable indicator of completion.
 
 ### 4. Compare output across calls
 
@@ -64,8 +65,34 @@ The same command may return different amounts of output between runs. When verif
 | Single command | Multi-step or piped commands |
 | Simple `npm`/`npx` calls | Commands with conditionals or loops |
 | Quick file checks (`cat`, `wc`) | Anything parsing or transforming output |
+| | Blocking runtimes (`python3`, see §6) |
 
-### 6. Cleanup
+### 6. Blocking commands
+
+Some commands put the agent into a **running state that blocks parallel execution** — no other tools can run until the command finishes. This includes `python3`, `python`, and `bash` itself. The redirect+poll workaround from §3 only works when the agent can call `view_file` while the command runs.
+
+**Fix:** Write the script to a file, make it executable, and **execute the script path directly** — never via `bash` or `python3`:
+
+```bash
+# 1. Write the script
+cat > /tmp/probe_a1b2.sh << 'EOF'
+#!/bin/bash
+python3 my_script.py > /tmp/probe_a1b2.txt 2>&1
+EOF
+chmod +x /tmp/probe_a1b2.sh
+
+# 2. Execute the script directly (NOT `bash /tmp/probe_a1b2.sh`)
+/tmp/probe_a1b2.sh
+```
+
+**⛔ Do NOT run these directly — they block the agent:**
+- `python3 script.py` → blocks
+- `bash script.sh` → blocks
+- `python script.py` → blocks
+
+If you discover other commands that block parallel execution, add them here.
+
+### 7. Cleanup
 
 Output files in `/tmp/` are ephemeral but accumulate. Clean up after a workflow completes:
 
@@ -77,8 +104,8 @@ rm /tmp/*_<short-id>.txt 2>/dev/null
 ## Quick Reference
 
 ```bash
-# Pattern: run + redirect + read
+# Pattern: run + redirect + poll + read
 my_command > /tmp/result_context_id.txt 2>&1   # run
+# after 10s: check file, cancel command if content present, continue
 view_file /tmp/result_context_id.txt            # read result
-# if hung: cancel command, read file, continue
 ```

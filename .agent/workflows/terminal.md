@@ -69,26 +69,29 @@ The same command may return different amounts of output between runs. When verif
 
 ### 6. Blocking commands
 
-Some commands put the agent into a **running state that blocks parallel execution** — no other tools can run until the command finishes. This includes `python3`, `python`, and `bash` itself. The redirect+poll workaround from §3 only works when the agent can call `view_file` while the command runs.
+Some commands put the agent into a **running state that blocks parallel execution** — no other tools can run until the command finishes. This applies to any long-running interpreter (`python3`, `node`, etc.).
 
-**Fix:** Write the script to a file, make it executable, and **execute the script path directly** — never via `bash` or `python3`:
+**Fix:** Write the script to a file, make it executable, and wrap in bash so the background command ID is returned and file polling works:
 
 ```bash
 # 1. Write the script
 cat > /tmp/probe_a1b2.sh << 'EOF'
-#!/bin/bash
+#!/usr/bin/env bash
 python3 my_script.py > /tmp/probe_a1b2.txt 2>&1
+echo "EXIT_CODE=$?"
 EOF
 chmod +x /tmp/probe_a1b2.sh
 
-# 2. Execute the script directly (NOT `bash /tmp/probe_a1b2.sh`)
-/tmp/probe_a1b2.sh
+# 2. Execute via bash wrapper (NOT `python3 script.py` directly)
+bash /tmp/probe_a1b2.sh > /tmp/probe_a1b2.txt 2>&1
+# Now use command_status + view_file to poll results
 ```
 
 **⛔ Do NOT run these directly — they block the agent:**
 - `python3 script.py` → blocks
-- `bash script.sh` → blocks
+- `bash script.sh` → blocks (unless via redirect+background)
 - `python script.py` → blocks
+- `node script.js` → blocks
 
 If you discover other commands that block parallel execution, add them here.
 

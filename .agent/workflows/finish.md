@@ -18,12 +18,18 @@ End-of-task workflow. Commits and merges after `/verify`.
 
 // turbo-all
 
-## 1. Stage & Commit
+## 1. Squash & Commit
+To avoid having too many commits saved, squash all incremental agent commits into one major commit.
 ```bash
-git add .; git status
+# Commit any lingering changes
+git add .
+git commit -m "Agent: final changes" || true
+# Squash all commits on this branch into one
+git reset $(git merge-base main HEAD)
+git add .
 git commit -m "type: description"
 ```
-Format: `type: concise description` — group related changes per commit.
+Format: `type: concise description` — summarize all changes in one commit message.
 
 Check: all new files staged, no untracked, no unstaged changes.
 > [!CAUTION]

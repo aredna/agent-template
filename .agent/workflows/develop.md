@@ -53,6 +53,7 @@ grep -l "pattern_from_plan" path/to/file || echo "⛔ PATTERN NOT FOUND"
 
 ## 3. Implement
 Create/modify files per plan or instructions.
+Make incremental commits immediately after modifying files (see `AGENTS.md` -> Incremental Commits).
 
 ## 3.5 Self-Check (Persona Sweep)
 Before proceeding to test gate, run MAINT, TEST, UX, SCOPE, DOCS, OPS personas

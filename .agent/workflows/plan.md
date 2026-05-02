@@ -23,6 +23,10 @@ Create self-contained implementation plans from research output. **Autonomous �
 ## 0. Worktree ⛔ GATE
 `pwd` → `/{PROJECT}`? STOP, create worktree first. `*-wt-*` or `*-wt-stream-*`? ✓ Continue.
 
+> [!IMPORTANT]
+> Worktrees for plans use the plan WORD, not timestamps:
+> `{PROJECT}-wt-{word}-{nn}` with branch `{type}/{word}-{nn}`
+
 ## 1. Migration Detection
 
 > [!CAUTION]
@@ -57,13 +61,13 @@ Identify parallelism: which plans can run together vs. sequentially.
 ## 4. Plan Naming
 
 **Format:** `{WORD}-{NN}-{name}.md`
-- WORD: a random 4–6 character common English word, all lowercase (e.g. `mint`, `spark`, `bloom`, `crane`, `flint`, `grove`). Pick one that doesn't collide with existing plan prefixes.
+- WORD: a **random** 4–6 character common English word, all lowercase. Don't try to be thematic or pick a word that describes the work — just pick a random word. Examples: `plum`, `chalk`, `mirth`, `knob`, `blaze`, `quilt`.
 - NN: 2-digit sequence (00=execution plan, 01-99=implementation)
 - Migration prefix: `migrate_`
 
 ```bash
-# Get next sequence
-ls .agent/plans/ 2>/dev/null | grep -oE "^$WORD-[0-9]{2}" | grep -oE '[0-9]{2}' | sort -n | tail -1
+# Verify prefix is unique across all folders in the current worktree — must return 0 results
+find .agent/plans -name "${WORD}-*" 2>/dev/null | head -5
 ```
 
 **Related plans:** One WORD, sequential NN values, create 00 execution plan last.

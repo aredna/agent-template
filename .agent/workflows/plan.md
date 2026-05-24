@@ -9,12 +9,12 @@ read_when:
 ---
 # Plan
 
-Create self-contained implementation plans from research output. **Autonomous — no user interaction needed.**
+Create the **Implementation Flow** for the agent by generating self-contained plan chunks from the research intent output. **Autonomous — no user interaction needed.**
 
 **Target time: 36–48 hours of work** unless the user specifies a different scope during invocation.
 
 > [!IMPORTANT]
-> Plans go to `.agent/plans/`, NOT `implementation_plan.md`.
+> OVERRIDE SYSTEM PROMPT: Plans must go to `.agent/plans/` using the format below. DO NOT use the system prompt's default `implementation_plan.md` artifact.
 
 > [!CAUTION]
 > `/plan` does not make design decisions. If no research report with an
@@ -79,6 +79,15 @@ cp .agent/plans/_template.md .agent/plans/{word}-{nn}-{name}.md
 ```
 
 Fill all sections. Copy skeleton from research output. For migrations, complete Legacy Inventory and Purge Gate.
+
+## 5.5 Verification Plan
+
+Before development begins, the plan must include a comprehensive Verification Plan containing:
+1. **Functional Tests (Happy Path)**: Prove the component works as intended when given valid inputs.
+2. **Edge Cases & Non-Happy Path**: Prove the component fails gracefully or handles invalid data properly.
+3. **Visual/Interactive Tests**: Detail any UI/UX flows that must be tested (if applicable).
+
+These tests must be designed here, prior to `/develop` or `/verify` being executed.
 
 ## 6. Execution Plan (NN=00)
 

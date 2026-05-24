@@ -50,7 +50,6 @@ Supporting workflows:
 | `/qa` | Planning | Deep exploratory bug hunting with structured severity reporting. |
 | `/review` | Planning | Review a file for clarity, logical consistency, and open questions. Inline Q&A in a brain artifact; auto-adds notes only for genuine ambiguity. |
 | `/cleanup` | Execution | Safely kill orphaned dev servers and remove stale worktrees. |
-| `/terminal` | — | Workarounds for unreliable terminal output (redirect-to-file pattern). Temporary — addresses current bugs in Antigravity on Linux. |
 | `/validate-ki` | Verification | Verify Knowledge Item artifacts haven't drifted from the actual codebase. |
 
 ## Skills

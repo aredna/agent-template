@@ -38,18 +38,17 @@ git worktree add -b $BRANCH ../{PROJECT}-wt-$TIMESTAMP main; cd ../{PROJECT}-wt-
 // turbo-all
 
 ## 1. Load Context
-Plan: `cat .agent/plans/{word}-{nn}-*.md` — follow Tasks exactly.
+Plan: Use `view_file` to read `.agent/plans/{word}-{nn}-*.md` — follow Tasks exactly.
 On-demand: `AGENTS.md` (File Index, Semantics, Errors).
 
-## 2. Plan Adherence ⛔ GATE
+## 2. Task Tracking ⛔ GATE
 
 > [!CAUTION]
-> **NO SHORTCUTS.** Tasks immutable. All files must be modified. All patterns must match. Tests passing ≠ complete.
+> **NO SHORTCUTS.** Tasks immutable. All files must be modified. Tests passing ≠ complete.
 
-Before marking task complete:
-```bash
-grep -l "pattern_from_plan" path/to/file || echo "⛔ PATTERN NOT FOUND"
-```
+Create the `task.md` system artifact (using the `write_to_file` tool with `IsArtifact: true`, which writes to `<appDataDir>/brain/<conversation-id>/task.md`) using your system prompt format (`[ ]`, `[/]`, `[x]`) to extract and track progress of the plan's tasks. Update this artifact continuously as you complete steps.
+
+Before marking a task complete, verify pattern implementations using `grep_search`.
 
 ## 3. Implement
 Create/modify files per plan or instructions.
@@ -69,7 +68,7 @@ Adds, updates, and removes tests for all implemented code before the test gate.
 {LINT_CMD}  # Zero errors/warnings
 ```
 
-**Pre-existing failure?** Prove with `git diff > /tmp/my_changes.patch` → `git checkout .` → test → `git apply /tmp/my_changes.patch`. Document in commit.
+**Pre-existing failure?** Prove with `git diff > my_changes.patch` → `git checkout .` → test → `git apply my_changes.patch` && gio trash my_changes.patch. Document in commit.
 
 ## 5. Finish
 → `/verify` then `/finish` (or notify user if stream worktree)

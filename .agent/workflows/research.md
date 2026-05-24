@@ -11,10 +11,10 @@ read_when:
 ---
 # Research
 
-Investigate codebase behavior and make design decisions with user. **Interactive — this is where design decisions happen.**
+Create the **Intent Document** by investigating codebase behavior and aligning design decisions with the user. **Interactive — this is where design decisions happen.**
 
 > [!IMPORTANT]
-> `/research` is the only interactive workflow. All downstream (`/plan` → `/develop` → `/verify` → `/finish`) run autonomously from research output.
+> `/research` is the intent documentation phase. It must be kept completely separate from the execution flow (`/plan`). All downstream (`/plan` → `/develop` → `/verify` → `/finish`) run autonomously from this research output.
 
 ## Outcome
 Report documenting: how functionality works, component interactions, findings, **approved design decisions**, and **structural skeleton** (if applicable).
@@ -42,6 +42,13 @@ When the research goal involves choosing an approach:
 4. **Get user approval** on chosen approach before proceeding to skeleton
 
 Skip this step for pure investigation research (tracing bugs, understanding behavior).
+
+## 2.6 Intent Alignment and Testability
+
+To ensure the intent document is fully aligned with the user:
+1. Use the `/grill-me` slash command to initiate an interactive interview.
+2. Resolve all design decisions during this interview.
+3. **Verify Testability**: Ensure that all requirements defined in the intent document are fully testable. If an intent requirement cannot be cleanly tested (both happy path and edge cases), refine the requirement with the user.
 
 ## 2.7 Structural Skeleton
 

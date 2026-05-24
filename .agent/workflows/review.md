@@ -61,7 +61,7 @@ If a point is genuinely ambiguous **and no other file clarifies it**:
 **Do not** add notes for things that are clear in context or explained elsewhere.
 
 ## 7. Summarize to User
-Present via `notify_user`:
+Present your summary in the chat response:
 - Count of questions found vs. self-resolved
 - List of **open questions only** (ones the agent could not answer)
 - Any notes added to the source file

@@ -13,22 +13,22 @@ read_when:
 Stage and commit any modifications with a **descriptive commit message** summarizing the actual changes. Generic messages like "Auto-commit before reload" are **NOT allowed**. The message must describe what was modified (e.g., `"fix(data-fetcher): restore S3 catch-up on stream end"`). If there are no changes, skip this step gracefully.
 ```bash
 git add .
-git commit -m "<descriptive message about what changed>" > /tmp/reload_commit.txt 2>&1 || true
+git commit -m "<descriptive message about what changed>" > .reload_commit.txt 2>&1 || true
 ```
 
 ## 2. Run the deploy process.
 Build and sync the application.
 ```bash
-npm run deploy > /tmp/reload_deploy.txt 2>&1
+npm run deploy
 ```
 
 ## 3. Validate the deploy process.
-You MUST use the `view_file` tool to verify the contents of `/tmp/reload_deploy.txt`. If the output contains errors or fails, STOP the workflow immediately and notify the user about the failure. DO NOT proceed to the next step.
+Verify the output of the deploy command. If the output contains errors or fails, STOP the workflow immediately and notify the user about the failure. DO NOT proceed to the next step.
 
 ## 4. Trigger the extension reload process.
 Provide a quick node script to connect to the PWA's WebSocket and execute the `restart-extension-host` action.
 ```bash
-node -e "const WebSocket=require('ws'); const ws=new WebSocket('ws://localhost:{DEFAULT_PORT}'); ws.on('open', () => { ws.send(JSON.stringify({type: 'ACTION', action: 'restart-extension-host'})); setTimeout(() => process.exit(0), 500); }); ws.on('error', () => process.exit(0));" > /tmp/reload_trigger.txt 2>&1
+node -e "const WebSocket=require('ws'); const ws=new WebSocket('ws://localhost:{DEFAULT_PORT}'); ws.on('open', () => { ws.send(JSON.stringify({type: 'ACTION', action: 'restart-extension-host'})); setTimeout(() => process.exit(0), 500); }); ws.on('error', () => process.exit(0));"
 ```
 
 ## 5. Finish.

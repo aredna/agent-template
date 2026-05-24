@@ -15,8 +15,8 @@ cd ../{PROJECT}-wt-{word}-{nn}
 > [!CAUTION]
 > **BEFORE any code changes**, capture baseline:
 ```bash
-{TEST_CMD} 2>&1 | tee /tmp/baseline_tests_{word}-{nn}.txt
-echo "Baseline failures: $(grep -c 'FAIL\|✗' /tmp/baseline_tests_{word}-{nn}.txt || echo 0)"
+{TEST_CMD} 2>&1 | tee baseline_tests_{word}-{nn}.txt
+echo "Baseline failures: $(grep -c 'FAIL\|✗' baseline_tests_{word}-{nn}.txt || echo 0)"
 ```
 
 ## Execution
@@ -89,11 +89,23 @@ rg "wrapper|shim|compat|legacy" {SRC_DIR} {SOURCE_TYPE_FLAG}
 rg "{SHIM_ALIAS_PATTERN}|= old|= deprecated" {SRC_DIR} {SOURCE_TYPE_FLAG}
 ```
 
-## Verification
-- Tests to run, manual checks, expected outcomes
-- **Pattern presence**: Grep for new patterns
-- **Legacy absence** (if migration): Grep old patterns
-- **File inspection**: View modified files
+## Verification Plan
+
+### 1. Functional Tests (Happy Path)
+- Explicit tests to run or commands to execute to prove the baseline works.
+- Expected successful outcomes.
+
+### 2. Edge Cases & Non-Happy Path
+- Tests to run for invalid data, timeouts, or failure states.
+- Expected graceful failure outcomes.
+
+### 3. Visual/Interactive Tests
+- (If applicable) Steps to manually or automatically verify UI/UX flows.
+
+### 4. Implementation Checks
+- **Pattern presence**: Grep for new patterns (Use `grep_search`).
+- **Legacy absence** (if migration): Grep old patterns (Use `grep_search`).
+- **File inspection**: View modified files (Use `view_file`).
 
 ## Files Affected
 | File | Change |

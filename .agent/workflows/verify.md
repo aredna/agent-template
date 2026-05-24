@@ -25,15 +25,12 @@ Pre-merge verification. Run before `/finish`.
 Build, test, and lint must all pass before plan completion checks begin.
 
 ## 1. Plan Completion (if implementing plan)
-```bash
-cat .agent/plans/{word}-{nn}-*.md
-```
-For each task: implemented (not skipped), pattern exists (grep), file modified (git diff).
+Read the `task.md` system artifact (located at `<appDataDir>/brain/<conversation-id>/task.md`) using `view_file` and verify all tasks are marked as `[x]`.
 
 ```bash
-grep -r "expected_pattern" path/to/file || echo "⛔ PATTERN MISSING"
 git diff main --name-only
 ```
+For each task: implemented (not skipped), pattern exists (use `grep_search`), file modified (git diff).
 
 ## 1.5 Change Review (Persona Sweep)
 For each changed file, run ARCH, SEC, PERF, TEST, COMPAT, SCOPE, OPS personas
